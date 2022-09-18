@@ -3,16 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="12dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:id="@+id/tv_label"
-        android:text="Expense"
+        tools:text="Expense"
         android:textColor="@color/black"
+        android:fontFamily="@font/giodle_regular"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        app:layout_constraintTop_toBottomOf="@id/tv_label"
+        app:layout_constraintStart_toStartOf="parent"
+        android:fontFamily="@font/giodle_regular"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        tools:text="11:28AM"
         android:layout_height="wrap_content" />
 
     <TextView
@@ -20,9 +33,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="Rs 20"
+        android:fontFamily="@font/giodle_regular"
+        tools:text="Rs 20"
+        android:textStyle="bold"
         android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="24sp"
+        android:gravity="end"
         app:layout_constraintStart_toEndOf="@id/tv_label"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

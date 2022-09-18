@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import com.example.moneymanager.Expense
-import com.example.moneymanager.ExpenseType
+import com.example.moneymanager.data.Expense
+import com.example.moneymanager.data.ExpenseType
 import com.example.moneymanager.databinding.LayoutMoneyAddBottomsheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -37,7 +37,7 @@ class MoneyAddBottomSheet : BottomSheetDialogFragment() {
             binding.radioExpenditure.isChecked -> ExpenseType.EXPENDITURE
             else -> ExpenseType.INCOME
         }
-        val expense = Expense(System.currentTimeMillis().toString(), type, binding.etAmount.text.toString().toDoubleOrNull() ?: 0.0, binding.etLabel.text.toString())
+        val expense = Expense(System.currentTimeMillis().toString(), type, binding.etAmount.text.toString().toDoubleOrNull() ?: 0.0, binding.etLabel.text.toString(), System.currentTimeMillis())
         parentFragmentManager.setFragmentResult("KEY", bundleOf("expense" to expense))
         dismiss()
     }
