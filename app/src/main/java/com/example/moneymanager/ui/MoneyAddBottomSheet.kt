@@ -5,13 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
+import com.example.moneymanager.MoneyManagerDataBase
 import com.example.moneymanager.data.Expense
 import com.example.moneymanager.data.ExpenseType
 import com.example.moneymanager.databinding.LayoutMoneyAddBottomsheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MoneyAddBottomSheet : BottomSheetDialogFragment() {
     private lateinit var binding: LayoutMoneyAddBottomsheetBinding
+    private val appDb: MoneyManagerDataBase? by lazy {
+        context?.applicationContext?.let { Room.databaseBuilder(it, MoneyManagerDataBase::class.java, "db").build() }
+    }
     companion object {
         fun start(): MoneyAddBottomSheet {
             return MoneyAddBottomSheet()
@@ -37,7 +46,10 @@ class MoneyAddBottomSheet : BottomSheetDialogFragment() {
             binding.radioExpenditure.isChecked -> ExpenseType.EXPENDITURE
             else -> ExpenseType.INCOME
         }
-        val expense = Expense(System.currentTimeMillis().toString(), type, binding.etAmount.text.toString().toDoubleOrNull() ?: 0.0, binding.etLabel.text.toString(), System.currentTimeMillis())
+        val expense = Expense(type = type, amount = binding.etAmount.text.toString().toDoubleOrNull() ?: 0.0, label = binding.etLabel.text.toString(), timeInMillis = System.currentTimeMillis())
+        lifecycleScope.launch(Dispatchers.IO) {
+            appDb?.getExpenseDao()?.addExpense(expense)
+        }
         parentFragmentManager.setFragmentResult("KEY", bundleOf("expense" to expense))
         dismiss()
     }
