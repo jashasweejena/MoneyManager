@@ -1,14 +1,10 @@
-package com.example.moneymanager.ui
+package com.example.moneymanager.ui.expenseslist
 
 import android.os.Bundle
 import androidx.lifecycle.*
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.savedstate.SavedStateRegistryOwner
 import com.example.moneymanager.data.Expense
-import com.example.moneymanager.data.ExpenseUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
+import com.example.moneymanager.viewmodel.BaseViewModel
 import kotlinx.coroutines.launch
 
 class ExpensesViewModel(private val repository: ExpensesRepository) : BaseViewModel() {

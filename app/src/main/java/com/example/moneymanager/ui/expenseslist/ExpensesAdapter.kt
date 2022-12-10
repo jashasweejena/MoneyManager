@@ -1,4 +1,4 @@
-package com.example.moneymanager.ui
+package com.example.moneymanager.ui.expenseslist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

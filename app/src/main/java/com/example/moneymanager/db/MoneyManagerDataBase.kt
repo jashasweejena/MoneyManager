@@ -1,4 +1,4 @@
-package com.example.moneymanager
+package com.example.moneymanager.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

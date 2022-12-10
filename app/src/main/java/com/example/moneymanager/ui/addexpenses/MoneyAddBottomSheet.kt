@@ -1,4 +1,4 @@
-package com.example.moneymanager.ui
+package com.example.moneymanager.ui.addexpenses
 
 import android.content.Context
 import android.os.Bundle
@@ -6,17 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
 import com.example.moneymanager.MoneyManagerApp
-import com.example.moneymanager.MoneyManagerDataBase
-import com.example.moneymanager.data.Expense
+import com.example.moneymanager.db.MoneyManagerDataBase
 import com.example.moneymanager.data.ExpenseType
 import com.example.moneymanager.data.ExpenseUtils
 import com.example.moneymanager.databinding.LayoutMoneyAddBottomsheetBinding
+import com.example.moneymanager.ui.base.ParentBottomsheetFragment
+import com.example.moneymanager.ui.expenseslist.ExpensesRepository
 import com.example.moneymanager.ui.utils.setUpdateDbTrigger
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MoneyAddBottomSheet : ParentBottomsheetFragment() {
     private lateinit var binding: LayoutMoneyAddBottomsheetBinding
@@ -25,7 +22,10 @@ class MoneyAddBottomSheet : ParentBottomsheetFragment() {
         ExpenseUtils(appDb.getExpenseDao())
     }
     private val viewModel: AddExpenseViewModel by viewModels {
-        AddExpenseViewModel.provideFactory(ExpensesRepository(appDb.getExpenseDao(), expenseUtils), this)
+        AddExpenseViewModel.provideFactory(
+            ExpensesRepository(appDb.getExpenseDao(), expenseUtils),
+            this
+        )
     }
 
     companion object {

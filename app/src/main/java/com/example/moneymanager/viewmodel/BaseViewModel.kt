@@ -1,4 +1,4 @@
-package com.example.moneymanager.ui
+package com.example.moneymanager.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,4 +1,4 @@
-package com.example.moneymanager.ui
+package com.example.moneymanager.ui.utils
 
 object Constants {
     const val DB_UPDATE_RESULT_LISTENER = "db_update_result_listener"

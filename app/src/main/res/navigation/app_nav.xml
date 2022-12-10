@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/expense_list_fragment"
-        android:name="com.example.moneymanager.ui.ExpenseListFragment"
+        android:name="com.example.moneymanager.ui.expenseslist.ExpenseListFragment"
         android:label="ExpenseListFragment" />
 </navigation>

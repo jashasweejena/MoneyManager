@@ -1,4 +1,4 @@
-package com.example.moneymanager.ui
+package com.example.moneymanager.ui.addexpenses
 
 import android.os.Bundle
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
 import com.example.moneymanager.data.Expense
 import com.example.moneymanager.data.ExpenseType
+import com.example.moneymanager.viewmodel.BaseViewModel
+import com.example.moneymanager.ui.expenseslist.ExpensesRepository
 
 class AddExpenseViewModel(private val repository: ExpensesRepository) : BaseViewModel() {
     companion object {

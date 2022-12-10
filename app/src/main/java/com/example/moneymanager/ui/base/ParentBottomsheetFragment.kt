@@ -1,9 +1,8 @@
-package com.example.moneymanager.ui
+package com.example.moneymanager.ui.base
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
+import com.example.moneymanager.ui.utils.Constants
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 abstract class ParentBottomsheetFragment : BottomSheetDialogFragment() {
@@ -14,7 +13,7 @@ abstract class ParentBottomsheetFragment : BottomSheetDialogFragment() {
         setupFragmentResultListeners()
     }
     private fun setupFragmentResultListeners() {
-        activity?.supportFragmentManager?.setFragmentResultListener(Constants.DB_UPDATE_RESULT_LISTENER, viewLifecycleOwner) {_, result ->
+        activity?.supportFragmentManager?.setFragmentResultListener(Constants.DB_UPDATE_RESULT_LISTENER, viewLifecycleOwner) { _, result ->
             if (result.containsKey(Constants.SHOULD_FETCH_FROM_DB)) {
                 updateUiFromDb()
             }

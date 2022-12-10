@@ -1,4 +1,4 @@
-package com.example.moneymanager.ui
+package com.example.moneymanager.ui.expenseslist
 
 import android.content.Context
 import android.os.Bundle
@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneymanager.MoneyManagerApp
-import com.example.moneymanager.MoneyManagerDataBase
+import com.example.moneymanager.db.MoneyManagerDataBase
 import com.example.moneymanager.data.ExpenseUtils
 import com.example.moneymanager.databinding.FragmentExpenseListBinding
+import com.example.moneymanager.ui.addexpenses.MoneyAddBottomSheet
+import com.example.moneymanager.ui.base.ParentFragment
 
 class ExpenseListFragment : ParentFragment() {
     private lateinit var binding: FragmentExpenseListBinding
@@ -23,7 +25,10 @@ class ExpenseListFragment : ParentFragment() {
     }
 
     private val viewModel: ExpensesViewModel by viewModels {
-        ExpensesViewModel.provideFactory(ExpensesRepository(appDb.getExpenseDao(), expenseUtils), this)
+        ExpensesViewModel.provideFactory(
+            ExpensesRepository(appDb.getExpenseDao(), expenseUtils),
+            this
+        )
     }
 
     override fun onAttach(context: Context) {
