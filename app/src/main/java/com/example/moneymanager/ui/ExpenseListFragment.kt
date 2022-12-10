@@ -1,12 +1,13 @@
 package com.example.moneymanager.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
+import com.example.moneymanager.MoneyManagerApp
 import com.example.moneymanager.MoneyManagerDataBase
 import com.example.moneymanager.data.ExpenseUtils
 import com.example.moneymanager.databinding.FragmentExpenseListBinding
@@ -16,9 +17,7 @@ class ExpenseListFragment : ParentFragment() {
     private val expenseAdapter: ExpensesRecyclerView by lazy {
         ExpensesRecyclerView()
     }
-    private val appDb: MoneyManagerDataBase by lazy {
-        Room.databaseBuilder(requireContext(), MoneyManagerDataBase::class.java, "db").build()
-    }
+    private lateinit var appDb: MoneyManagerDataBase
     private val expenseUtils by lazy {
         ExpenseUtils(appDb.getExpenseDao())
     }
@@ -27,6 +26,10 @@ class ExpenseListFragment : ParentFragment() {
         ExpensesViewModel.provideFactory(ExpensesRepository(appDb.getExpenseDao(), expenseUtils), this)
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appDb = (activity?.applicationContext as MoneyManagerApp).expensesDb
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

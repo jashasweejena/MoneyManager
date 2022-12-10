@@ -1,14 +1,18 @@
 package com.example.moneymanager.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
+import com.example.moneymanager.MoneyManagerApp
 import com.example.moneymanager.MoneyManagerDataBase
 import com.example.moneymanager.data.Expense
 import com.example.moneymanager.data.ExpenseType
+import com.example.moneymanager.data.ExpenseUtils
 import com.example.moneymanager.databinding.LayoutMoneyAddBottomsheetBinding
 import com.example.moneymanager.ui.utils.setUpdateDbTrigger
 import kotlinx.coroutines.Dispatchers
@@ -16,14 +20,25 @@ import kotlinx.coroutines.launch
 
 class MoneyAddBottomSheet : ParentBottomsheetFragment() {
     private lateinit var binding: LayoutMoneyAddBottomsheetBinding
-    private val appDb: MoneyManagerDataBase? by lazy {
-        context?.applicationContext?.let { Room.databaseBuilder(it, MoneyManagerDataBase::class.java, "db").build() }
+    private lateinit var appDb: MoneyManagerDataBase
+    private val expenseUtils by lazy {
+        ExpenseUtils(appDb.getExpenseDao())
     }
+    private val viewModel: AddExpenseViewModel by viewModels {
+        AddExpenseViewModel.provideFactory(ExpensesRepository(appDb.getExpenseDao(), expenseUtils), this)
+    }
+
     companion object {
         fun start(): MoneyAddBottomSheet {
             return MoneyAddBottomSheet()
         }
     }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appDb = (activity?.applicationContext as MoneyManagerApp).expensesDb
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,18 +60,16 @@ class MoneyAddBottomSheet : ParentBottomsheetFragment() {
         }
         type ?: return
 
-        val multiplier = when(type) {
-            ExpenseType.INCOME -> 1
-            ExpenseType.EXPENDITURE -> -1
-        }
-        val amount = (binding.etAmount.text.toString().toDoubleOrNull() ?: 0.0) * multiplier
-        val expense = Expense(type = type, amount = amount, label = binding.etLabel.text.toString(), timeInMillis = System.currentTimeMillis())
-        lifecycleScope.launch(Dispatchers.IO) {
-            appDb?.getExpenseDao()?.addExpense(expense)
-            setUpdateDbTrigger(reloadFromDb = true, fragmentManager = childFragmentManager)
-            dismiss()
-        }
+        viewModel.addExpense(
+            type,
+            binding.etAmount.text.toString().toDoubleOrNull() ?: 0.0,
+            binding.etLabel.text.toString()
+        )
+        setUpdateDbTrigger(reloadFromDb = true, fragmentManager = childFragmentManager)
+        dismiss()
+
     }
+
     override fun updateUiFromDb() = Unit
 
 }

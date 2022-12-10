@@ -33,10 +33,6 @@ class ExpensesViewModel(private val repository: ExpensesRepository) : BaseViewMo
             }
     }
 
-    fun addExpense(expense: Expense) {
-        repository.addExpense(expense, viewModelScope)
-    }
-
     fun getExpenses() {
         viewModelScope.launch {
             repository.getExpenses().collect {
