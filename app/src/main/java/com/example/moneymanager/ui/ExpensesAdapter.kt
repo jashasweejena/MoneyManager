@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moneymanager.data.ExpenseUiModel
 import com.example.moneymanager.databinding.ItemExpenseBinding
 
-class ExpensesRecyclerView : ListAdapter<ExpenseUiModel, ExpenseRecyclerViewHolder>(ExpensesComparator()) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseRecyclerViewHolder {
+class ExpensesRecyclerView : ListAdapter<ExpenseUiModel, ExpenseViewHolder>(ExpensesComparator()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseViewHolder {
         val binding = ItemExpenseBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ExpenseRecyclerViewHolder(binding)
+        return ExpenseViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ExpenseRecyclerViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ExpenseViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
@@ -31,7 +31,7 @@ class ExpensesComparator : DiffUtil.ItemCallback<ExpenseUiModel>() {
 
 }
 
-class ExpenseRecyclerViewHolder(private val binding: ItemExpenseBinding) : RecyclerView.ViewHolder(binding.root) {
+class ExpenseViewHolder(private val binding: ItemExpenseBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(expense: ExpenseUiModel) {
         binding.tvAmount.text = expense.amount.toString()
         binding.tvLabel.text = expense.label

@@ -2,15 +2,16 @@ package com.example.moneymanager.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ExpenseDao {
     @Query("SELECT * FROM expense")
-    fun getExpenses(): LiveData<List<Expense>>
+    fun getExpenses(): Flow<List<Expense>>
     @Insert
-    fun addExpense(expense: Expense)
+    suspend fun addExpense(expense: Expense)
     @Delete
-    fun removeExpense(expense: Expense)
+    suspend fun removeExpense(expense: Expense)
     @Update
-    fun updateExpense(expense: Expense)
+    suspend fun updateExpense(expense: Expense)
 }

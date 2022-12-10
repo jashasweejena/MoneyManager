@@ -4,19 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.example.moneymanager.MoneyManagerDataBase
 import com.example.moneymanager.data.Expense
 import com.example.moneymanager.data.ExpenseType
 import com.example.moneymanager.databinding.LayoutMoneyAddBottomsheetBinding
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.CoroutineScope
+import com.example.moneymanager.ui.utils.setUpdateDbTrigger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MoneyAddBottomSheet : BottomSheetDialogFragment() {
+class MoneyAddBottomSheet : ParentBottomsheetFragment() {
     private lateinit var binding: LayoutMoneyAddBottomsheetBinding
     private val appDb: MoneyManagerDataBase? by lazy {
         context?.applicationContext?.let { Room.databaseBuilder(it, MoneyManagerDataBase::class.java, "db").build() }
@@ -36,7 +34,6 @@ class MoneyAddBottomSheet : BottomSheetDialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         binding.btnAdd.setOnClickListener { onAddClick() }
     }
 
@@ -44,13 +41,22 @@ class MoneyAddBottomSheet : BottomSheetDialogFragment() {
         val type = when {
             binding.radioIncome.isChecked -> ExpenseType.INCOME
             binding.radioExpenditure.isChecked -> ExpenseType.EXPENDITURE
-            else -> ExpenseType.INCOME
+            else -> null
         }
-        val expense = Expense(type = type, amount = binding.etAmount.text.toString().toDoubleOrNull() ?: 0.0, label = binding.etLabel.text.toString(), timeInMillis = System.currentTimeMillis())
+        type ?: return
+
+        val multiplier = when(type) {
+            ExpenseType.INCOME -> 1
+            ExpenseType.EXPENDITURE -> -1
+        }
+        val amount = (binding.etAmount.text.toString().toDoubleOrNull() ?: 0.0) * multiplier
+        val expense = Expense(type = type, amount = amount, label = binding.etLabel.text.toString(), timeInMillis = System.currentTimeMillis())
         lifecycleScope.launch(Dispatchers.IO) {
             appDb?.getExpenseDao()?.addExpense(expense)
+            setUpdateDbTrigger(reloadFromDb = true, fragmentManager = childFragmentManager)
+            dismiss()
         }
-        parentFragmentManager.setFragmentResult("KEY", bundleOf("expense" to expense))
-        dismiss()
     }
+    override fun updateUiFromDb() = Unit
+
 }
